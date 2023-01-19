@@ -11,16 +11,35 @@
 </head>
 <body>
 	<h1>Plan what you want to do!</h1>
+
+	<form action="{% url 'add' %}" method="POST">
+		{% csrf_token %}
+		<input type="text" 
+		placeholder="What is your plan?"
+		name="myplan">
+
+		<input
+		type="submit"
+		value="Save"
+		name="submit">
+	</form>
+
 	<ul>
-		<li>
-			<strike>Learn Python</strike>
-		</li>
-		<li>
-			Learn Django
-		</li>
-		<li>
-			Learn SQLite
-		</li>
+		{% if todos %}
+			{% for todo in todos %}
+			<li>
+				{% if todo.status %}
+					<strike>{{todo.plan}}</strike>
+					<a href="{% url 'cancel' todo.id%}">Cancel</a>
+					<a href="{% url 'delete' todo.id %}">Delete</a>
+				{% else %}
+					{{todo.plan}}
+					<a href="{% url 'done' todo.id %}">Done</a>
+					<a href="{% url 'delete' todo.id %}">Delete</a>	
+				{% endif %}
+			</li>
+			{% endfor %}
+		{% endif %}
 	</ul>
 </body>
 </html>
